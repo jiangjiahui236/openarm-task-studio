@@ -83,6 +83,6 @@ OPENARM_TASK_STUDIO_SELF_TEST=1 ./run_task_studio.sh --headless --duration 30
 
 ## 贡献与许可
 
-欢迎提交 Issue 和 Pull Request。使用前请阅读 `CONTRIBUTING.md`。本项目采用 [Apache License 2.0](LICENSE)。
+欢迎提交 Issue 和 Pull Request。使用前请阅读 `CONTRIBUTING.md`。本项目采用 [GNU General Public License v3.0](LICENSE)。依赖的软件和库继续遵循各自的许可证。
 
 准备制作演示视频时，可参考 [B 站发布建议](docs/BILIBILI_PUBLISHING.md)。
