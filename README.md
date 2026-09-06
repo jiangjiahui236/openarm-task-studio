@@ -268,5 +268,3 @@ cd "$OPENARM_ISAAC_REPO"
 欢迎提交 Issue 和 Pull Request。报告问题时请附上系统版本、Isaac Sim / Isaac Lab 版本和完整报错。贡献代码前请阅读 `CONTRIBUTING.md`。
 
 本项目采用 [GNU General Public License v3.0](LICENSE)，依赖的软件和库继续遵循各自的许可证。
-
-准备制作演示视频时，可参考 [B 站发布建议](docs/BILIBILI_PUBLISHING.md)。
