@@ -1,16 +1,16 @@
 # OpenArm Task Studio
 
-这是一个给 OpenArm 双臂机器人做的可视化任务编辑器。简单来说，你可以在 Isaac Sim 里摆放 Move、Grasp、Place 任务点，让机器人按顺序执行；也可以站在摄像头前挥动手臂，用 D435 或普通摄像头做一个比较直观的动作示教。
+这是一个 OpenArm 双臂机器人的可视化任务编辑器。可以在 Isaac Sim 里摆放 Move、Grasp、Place 任务点并按顺序执行，也可以通过 D435 或普通摄像头进行上肢动作示教。
 
-这个项目最初是为了把自己的 OpenArm 仿真实验串起来，所以目前更像一个“能用、能继续折腾”的实验工具，而不是打磨完成的正式产品。如果你也在玩 OpenArm、Isaac Sim 或动作捕捉，希望它能帮你少走一点弯路。
+项目最初用来串联自己的 OpenArm 仿真实验，目前仍是一个实验工具，不是成熟产品。
 
-## 先说在前面
+## 项目状态
 
-本项目是在 AI 辅助下开发的。AI 参与了代码编写、重构、测试和文档整理，但功能设计、实际运行、问题排查和最终取舍仍由作者完成。
+本项目使用 AI 辅助开发。AI 参与了代码编写、重构、测试和文档整理；功能设计、运行验证和最终取舍由作者完成。
 
-项目里肯定还有不少问题，例如环境兼容性不够全面、部分异常提示不够友好、普通 RGB 摄像头的深度估计不如 D435 稳定，以及当前避障还不是真正的整臂运动规划。README 也可能遗漏某些机器上的特殊情况。如果你复现时卡住了，不一定是你的操作有问题，也可能确实是项目的坑，欢迎提交 Issue，把终端报错、系统版本和复现步骤一起贴出来。
+项目仍有不少问题：环境兼容性有限，部分错误提示不够清楚，普通 RGB 摄像头的深度估计不如 D435 稳定，避障也不是真正的整臂运动规划。README 无法覆盖所有机器的情况。复现失败时可以提交 Issue，并附上终端报错、系统版本和复现步骤。
 
-目前建议把它用于仿真、研究和学习。避障采用 TCP 对场景 AABB 的采样，不是完整机械臂碰撞规划，请不要直接用于无人值守的真实机器人生产环境。
+本项目适合仿真、研究和学习。避障采用 TCP 对场景 AABB 的采样，请勿直接用于无人值守的真实机器人生产环境。
 
 ## 它现在能做什么
 
@@ -33,7 +33,7 @@
 - 动作捕捉进程使用系统 Python 3.10，并需要 OpenCV、MediaPipe、PyYAML
 - 可选：Intel RealSense D435；没有 D435 时可使用普通 USB/笔记本摄像头
 
-这套环境的安装确实有一点长，最容易出问题的地方通常不是 Task Studio 本身，而是 Isaac Sim、Isaac Lab 和 OpenArm Isaac Lab 的版本没有对齐。建议先让 OpenArm Isaac Lab 自带示例正常跑起来，再接着安装 Task Studio。本文档按目前验证过的组合 `Isaac Sim 5.1.0 + Isaac Lab 2.3.0` 编写。
+安装问题大多来自 Isaac Sim、Isaac Lab 和 OpenArm Isaac Lab 版本不匹配。请先运行 OpenArm Isaac Lab 自带示例，再安装 Task Studio。本文档基于 `Isaac Sim 5.1.0 + Isaac Lab 2.3.0`。
 
 ## 从零安装
 
@@ -57,7 +57,7 @@ cd openarm_isaac_lab
 /path/to/IsaacLab/isaaclab.sh -p scripts/tools/list_envs.py
 ```
 
-最后一个命令能列出 OpenArm 环境，就说明最麻烦的一关基本过了。如果这里失败，先不用急着安装 Task Studio，优先把 OpenArm Isaac Lab 的环境处理好。
+最后一个命令应列出 OpenArm 环境。如果失败，请先修复 OpenArm Isaac Lab 环境。
 
 ### 3. 克隆 Task Studio
 
@@ -117,7 +117,7 @@ cd openarm-task-studio
 ./run_task_studio.sh
 ```
 
-首次启动 Isaac Sim 通常会比较慢，终端停一会儿很正常。顺利进入后应该能看到：
+首次启动 Isaac Sim 可能需要等待一段时间。进入后应看到：
 
 - 中央为 OpenArm 双臂仿真视口
 - 左侧为 `OpenArm Task Studio`
@@ -265,7 +265,7 @@ cd "$OPENARM_ISAAC_REPO"
 
 ## 贡献与许可
 
-欢迎提交 Issue 和 Pull Request。哪怕只是告诉我“这一步在我的电脑上不工作”，也很有价值；如果能附上系统版本、Isaac Sim / Isaac Lab 版本和完整报错，就更容易一起找到原因。贡献代码前可以先看一下 `CONTRIBUTING.md`。
+欢迎提交 Issue 和 Pull Request。报告问题时请附上系统版本、Isaac Sim / Isaac Lab 版本和完整报错。贡献代码前请阅读 `CONTRIBUTING.md`。
 
 本项目采用 [GNU General Public License v3.0](LICENSE)，依赖的软件和库继续遵循各自的许可证。
 
