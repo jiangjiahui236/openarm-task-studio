@@ -30,7 +30,7 @@
 - [Isaac Lab](https://github.com/isaac-sim/IsaacLab) 2.3.0
 - [OpenArm Isaac Lab](https://github.com/enactic/openarm_isaac_lab)
 - Isaac Sim / Isaac Lab 环境使用 Python 3.11
-- 动作捕捉进程使用系统 Python 3.10，并需要 OpenCV、MediaPipe、PyYAML
+- 动作捕捉进程使用系统 Python 3.10，并需要 OpenCV、MediaPipe 0.10.21、PyYAML
 - 可选：Intel RealSense D435；没有 D435 时可使用普通 USB/笔记本摄像头
 
 安装问题大多来自 Isaac Sim、Isaac Lab 和 OpenArm Isaac Lab 版本不匹配。请先运行 OpenArm Isaac Lab 自带示例，再安装 Task Studio。本文档基于 `Isaac Sim 5.1.0 + Isaac Lab 2.3.0`。
