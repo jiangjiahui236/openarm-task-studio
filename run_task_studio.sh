@@ -22,7 +22,7 @@ if [[ ! -x "$ISAACLAB_ROOT/isaaclab.sh" ]]; then
   echo "[ERROR] Isaac Lab launcher not found: $ISAACLAB_ROOT/isaaclab.sh" >&2
   exit 2
 fi
-if [[ ! -d "$OPENARM_ISAAC_REPO/openarm" ]]; then
+if [[ ! -d "$OPENARM_ISAAC_REPO/source/openarm" ]]; then
   echo "[ERROR] OpenArm Isaac Lab repository not found: $OPENARM_ISAAC_REPO" >&2
   exit 2
 fi

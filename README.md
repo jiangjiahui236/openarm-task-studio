@@ -16,36 +16,134 @@
 
 ## 环境要求
 
-- Ubuntu 22.04
-- Python 3.10
-- NVIDIA Isaac Sim 对应的 Python 虚拟环境
-- [Isaac Lab](https://github.com/isaac-sim/IsaacLab)（已验证 `v2.3.0`）
+- Ubuntu 22.04（当前仅验证 Linux）
+- NVIDIA GPU、驱动以及能够正常启动 Isaac Sim 的图形环境
+- Isaac Sim 5.1.0
+- [Isaac Lab](https://github.com/isaac-sim/IsaacLab) 2.3.0
 - [OpenArm Isaac Lab](https://github.com/enactic/openarm_isaac_lab)
-- NVIDIA GPU 和满足 Isaac Sim 要求的驱动
+- Isaac Sim / Isaac Lab 环境使用 Python 3.11
+- 动作捕捉进程使用系统 Python 3.10，并需要 OpenCV、MediaPipe、PyYAML
 - 可选：Intel RealSense D435；没有 D435 时可使用普通 USB/笔记本摄像头
 
-三个上游项目的版本必须互相兼容。若上游仓库后续接口变化，建议先使用 Isaac Lab `v2.3.0` 和与你的 Isaac Sim 版本匹配的 OpenArm Isaac Lab 提交。
+推荐先确认 OpenArm Isaac Lab 自带示例能够运行，再安装 Task Studio。Isaac Sim、Isaac Lab 和 OpenArm Isaac Lab 必须互相兼容；本文档按 OpenArm Isaac Lab 当前验证组合 `Isaac Sim 5.1.0 + Isaac Lab 2.3.0` 编写。
 
-## 安装
+## 从零安装
+
+### 1. 安装 Isaac Sim 和 Isaac Lab
+
+按照 [Isaac Lab 官方本地安装文档](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html#local-installation) 完成安装。安装后确认下面两个命令能够运行：
 
 ```bash
-git clone https://github.com/YOUR_NAME/openarm-task-studio.git
-cd openarm-task-studio
-python3 -m pip install -r requirements-camera.txt
+/path/to/IsaacLab/isaaclab.sh -p -c "import isaaclab; print('Isaac Lab OK')"
+/path/to/IsaacLab/isaaclab.sh -p -c "import isaacsim; print('Isaac Sim OK')"
+```
 
-# 按实际安装位置设置，不要把个人路径提交到仓库
+`/path/to/IsaacLab` 需要替换成实际的 Isaac Lab 根目录。
+
+### 2. 安装 OpenArm Isaac Lab
+
+```bash
+git clone https://github.com/enactic/openarm_isaac_lab.git
+cd openarm_isaac_lab
+/path/to/IsaacLab/isaaclab.sh -p -m pip install -e source/openarm
+/path/to/IsaacLab/isaaclab.sh -p scripts/tools/list_envs.py
+```
+
+最后一个命令应能列出 OpenArm 环境。如果这里失败，请先解决 OpenArm Isaac Lab 安装问题，再继续。
+
+### 3. 克隆 Task Studio
+
+```bash
+git clone https://github.com/jiangjiahui236/openarm-task-studio.git
+cd openarm-task-studio
+```
+
+### 4. 安装动作捕捉依赖
+
+相机进程由 `/usr/bin/python3` 启动，与 Isaac Sim Python 环境相互独立：
+
+```bash
+sudo apt update
+sudo apt install -y python3-pip python3-tk v4l-utils ripgrep
+python3 -m pip install --user -r requirements-camera.txt
+python3 -c "import cv2, mediapipe, yaml; print('Camera dependencies OK')"
+```
+
+使用 D435 时再检查：
+
+```bash
+python3 -c "import pyrealsense2; print('RealSense OK')"
+rs-enumerate-devices
+```
+
+如果 `rs-enumerate-devices` 不存在或普通用户无法访问 D435，请先按照 Intel RealSense 官方文档安装 SDK 和 udev 规则。
+
+### 5. 配置安装路径
+
+```bash
 export ISAACSIM_VENV=/path/to/isaacsim/venv
 export ISAACLAB_ROOT=/path/to/IsaacLab
 export OPENARM_ISAAC_REPO=/path/to/openarm_isaac_lab
-
-./run_task_studio.sh
 ```
 
 变量含义：
 
 - `ISAACSIM_VENV`：包含 `bin/activate` 的 Isaac Sim Python 环境
-- `ISAACLAB_ROOT`：包含 `isaaclab.sh` 的 Isaac Lab 根目录
-- `OPENARM_ISAAC_REPO`：包含 `openarm/` Python 包的 OpenArm Isaac Lab 仓库
+- `ISAACLAB_ROOT`：包含可执行文件 `isaaclab.sh` 的 Isaac Lab 根目录
+- `OPENARM_ISAAC_REPO`：包含 `source/openarm` 的 OpenArm Isaac Lab 仓库根目录
+
+可以先检查三个路径：
+
+```bash
+test -f "$ISAACSIM_VENV/bin/activate" && echo "Isaac Sim venv OK"
+test -x "$ISAACLAB_ROOT/isaaclab.sh" && echo "Isaac Lab root OK"
+test -d "$OPENARM_ISAAC_REPO/source/openarm" && echo "OpenArm repo OK"
+```
+
+需要长期使用时，可以将三个 `export` 加入 `~/.bashrc`，然后重新打开终端。
+
+### 6. 启动
+
+```bash
+cd openarm-task-studio
+./run_task_studio.sh
+```
+
+首次启动 Isaac Sim 通常较慢。成功后应看到：
+
+- 中央为 OpenArm 双臂仿真视口
+- 左侧为 `OpenArm Task Studio`
+- 右侧为 `Task Point Parameters`
+- 右下角为 `Motion Capture`
+- 中央下方有 Console / Content / Button Test 标签页
+
+只验证能否启动时可运行：
+
+```bash
+./run_task_studio.sh --headless --duration 30
+```
+
+## 快速上手
+
+### 创建并运行简单 Move 任务
+
+1. 点击 `LEFT ARM` 或 `RIGHT ARM` 选择手臂。
+2. 点击 `Move`，视口中会出现一个任务点。
+3. 拖动任务点，或在右侧参数窗口修改 XYZ。
+4. 点击 `Confirm Current Edit`。
+5. 继续添加任务点后，点击 `Validate Scene Path` 检查路径。
+6. 点击 `Preview Selected` 预览单点，或点击 `Run Full Task` 执行完整任务。
+7. 点击 `Save Task JSON`，任务会保存到 `tasks/current_task.json`。
+
+### 创建 Grasp / Place 任务
+
+1. 设置工作台高度和距离。
+2. 点击 `Grasp`，设置物体形状、尺寸、抓取方向、接近高度和安全间隙。
+3. 将物体代理拖到抓取位置并确认。
+4. 点击 `Place`，设置目标位置并确认。
+5. 先执行 `Validate Scene Path`，确认无明显 TCP/工作台碰撞，再运行任务。
+
+当前碰撞检查只覆盖 TCP 路径与场景 AABB，不保证机械臂所有连杆、夹爪和携带物绝对无碰撞。
 
 ## 动作捕捉
 
@@ -64,22 +162,98 @@ export OPENARM_ISAAC_REPO=/path/to/openarm_isaac_lab
 
 RGB-D 模式使用对齐深度反投影三维关键点；RGB 模式使用 MediaPipe 单目 world landmarks，深度精度和稳定性通常低于 D435。
 
+若 RGB 摄像头不是设备 `0`，先运行：
+
+```bash
+v4l2-ctl --list-devices
+ls -l /dev/video*
+./run_d435_teaching_camera.sh --source rgb --camera-index 1
+```
+
+相机被浏览器、会议软件或其他 OpenCV 程序占用时，先关闭占用程序。切换 RGB-D / RGB 后需要重新保持中立姿态完成标定。
+
+## 参数调节
+
+Task Studio 中点击 `Open Motion Mapping Tuner` 可调节动作映射。配置保存在 `config/openarm_d435_teleop_visual.yaml`，相机发送器和仿真接收器会读取同一文件。
+
+也可以单独启动：
+
+```bash
+python3 d435_tuning_gui.py --config config/openarm_d435_teleop_visual.yaml
+```
+
+调参前建议备份配置。参数过大会导致动作跳变或触及关节限位。
+
 ## 测试
 
 ```bash
+python3 -m pip install --user -r requirements-dev.txt
 python3 -m pytest -q tests
 OPENARM_TASK_STUDIO_SELF_TEST=1 ./run_task_studio.sh --headless --duration 30
 ```
 
+纯 Python 测试不需要启动 Isaac Sim。Isaac Sim 自检必须在完整仿真环境中运行。
+
+## 常见问题
+
+### 启动脚本提示缺少环境变量
+
+重新执行第 5 步的三个 `export`，并用 `test` 命令确认路径存在。
+
+### 提示 `No module named openarm`
+
+使用 Isaac Lab Python 重新安装 OpenArm 包：
+
+```bash
+cd "$OPENARM_ISAAC_REPO"
+"$ISAACLAB_ROOT/isaaclab.sh" -p -m pip install -e source/openarm
+```
+
+### 提示 `No module named carb` 或 `omni`
+
+这些模块只存在于 Isaac Sim Python 环境。不要直接用系统 `python3 launch_task_studio.py`，请始终使用 `./run_task_studio.sh`。
+
+### Motion Capture 一直黑屏
+
+- 先点击 `Start Motion Teaching`
+- 检查 `/dev/video*` 和摄像头权限
+- 确认摄像头没有被其他程序占用
+- 在终端单独运行相机验证命令查看错误
+- D435 模式确认 USB 3 连接和 `rs-enumerate-devices` 输出
+
+### 能看到画面但机械臂不动
+
+- 双肩、双肘和双腕必须同时可见
+- 保持中立姿态约 45 帧直到完成标定
+- 检查选择的是 `TEACH LEFT`、`TEACH RIGHT` 还是 `TEACH BOTH`
+- 观察终端是否持续收到 UDP 5010 数据
+
+### 窗口布局没有自动停靠
+
+等待启动后的数秒布局校正；仍不正常时重启应用并避免同时加载修改相同窗口布局的 Kit 扩展。
+
 ## 目录
 
-- `openarm_task_studio/`：Kit 扩展、任务模型、编译器和运行时状态
-- `launch_task_studio.py`：Isaac Lab 场景和执行循环
-- `studio_scene.py`：OpenArm 双臂、地面与工作台场景
-- `d435_rgbd_sender.py`：RGB-D / RGB 姿态捕捉和 UDP 发送器
-- `config/`：动作映射与 Kit 扩展配置
-- `esp32c3_remote_button/`：可选无线记录按钮固件
-- `ARCHITECTURE.md`：任务编译与执行架构
+| 路径 | 用途 |
+| --- | --- |
+| `launch_task_studio.py` | Isaac Lab 启动入口、仿真循环、双臂 IK 与任务执行 |
+| `studio_scene.py` | OpenArm 双臂机器人、地面、灯光和工作台场景 |
+| `openarm_task_studio/extension.py` | Kit UI、任务点编辑、窗口和动作捕捉交互 |
+| `openarm_task_studio/task_model.py` | 任务 JSON 数据模型与保存/加载 |
+| `openarm_task_studio/task_compiler.py` | 将 Move / Grasp / Place 编译为执行阶段 |
+| `openarm_task_studio/stage_objects.py` | USD 任务点、物体代理、路径和碰撞几何 |
+| `openarm_task_studio/runtime.py` | UI 与仿真循环共享的运行状态 |
+| `openarm_task_studio/d435_teaching.py` | 动作捕捉 UDP 接收与关节映射 |
+| `openarm_task_studio/motion_monitor.py` | 动作捕捉运行指标和日志 |
+| `openarm_task_studio/remote_button.py` | ESP32-C3 无线记录按钮接收器 |
+| `d435_rgbd_sender.py` | RGB-D / RGB 采集、MediaPipe 识别和 UDP 发送 |
+| `d435_tuning_base.py` | 通用 Tkinter 参数调节器实现 |
+| `d435_tuning_gui.py` | Task Studio 专用调参项和界面扩展 |
+| `tests/` | 不依赖 Isaac Sim 启动的单元测试 |
+| `config/` | Kit 扩展清单和动作映射配置 |
+| `esp32c3_remote_button/` | 可选 ESP32-C3 固件与接线说明 |
+
+这些 Python 文件按职责拆分，都是运行功能或测试所需文件；`__pycache__`、`.pytest_cache`、日志和个人任务数据由 `.gitignore` 排除，不会进入 GitHub。
 
 ## 贡献与许可
 
