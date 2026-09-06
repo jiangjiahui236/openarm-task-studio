@@ -1,0 +1,2 @@
+-r requirements-camera.txt
+pytest>=7,<9

@@ -1,0 +1,20 @@
+[package]
+version = "0.1.0"
+category = "Robotics"
+title = "OpenArm Task Studio"
+description = "Typed 3D task authoring for OpenArm bimanual production workflows"
+authors = ["OpenArm AI Workspace"]
+readme = "README.md"
+keywords = ["OpenArm", "task editor", "robotics", "motion planning"]
+
+[dependencies]
+"omni.usd" = {}
+"omni.ui" = {}
+"omni.kit.window.property" = {}
+
+[[python.module]]
+name = "openarm_task_studio"
+
+[[test]]
+timeout = 120
+

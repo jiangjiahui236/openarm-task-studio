@@ -1,0 +1,213 @@
+robot:
+  base_frame: world
+tracking:
+  min_visibility: 0.55
+  min_command_confidence: 0.45
+  depth_window_px: 3
+  enable_depth_filters: true
+  depth_temporal_alpha: 0.95
+  depth_temporal_delta: 30
+  min_arm_segment_m: 0.035
+  reference_min_arm_segment_m: 0.12
+  max_arm_segment_m: 0.65
+  segment_ratio_min: 0.15
+  segment_ratio_max: 1.65
+  max_point_speed_m_s: 20.0
+  point_jump_allowance_m: 0.08
+  position_smoothing_alpha: 0.95
+  depth_dropout_hold_s: 0.15
+mapping:
+  orientation_mode: fixed
+  camera_to_robot_delta:
+    x: -camera_z
+    y: camera_x
+    z: -camera_y
+  position_scale:
+  - 0.45
+  - 0.55
+  - 0.3
+  max_delta_m:
+  - 0.14
+  - 0.1
+  - 0.18
+filter:
+  min_cutoff: 1.2
+  beta: 0.08
+  d_cutoff: 1.0
+  orientation_window: 5
+control:
+  command_mode: joint_pose
+  command_rate_hz: 30.0
+  trajectory_time_s: 0.05
+  velocity_feedforward_gain: 1.5
+  ik_timeout_s: 0.25
+  avoid_collisions: true
+  prefer_configured_ik_seed: true
+teaching_protection:
+  max_single_packet_jump_rad: 0.3
+  jump_confirmation_tolerance_rad: 0.55
+  max_joint_speed_rad_s:
+  - 8.0
+  - 8.0
+  - 10.0
+  - 10.0
+  - 12.0
+  - 12.0
+  - 12.0
+arms:
+  left:
+    moveit_group: left_arm
+    ik_link: openarm_left_hand
+    controller_action: /left_joint_trajectory_controller/follow_joint_trajectory
+    joint_names:
+    - openarm_left_joint1
+    - openarm_left_joint2
+    - openarm_left_joint3
+    - openarm_left_joint4
+    - openarm_left_joint5
+    - openarm_left_joint6
+    - openarm_left_joint7
+    neutral_position:
+    - -0.08
+    - 0.22
+    - 0.32
+    neutral_quaternion_xyzw:
+    - 1.0
+    - 0.0
+    - 0.0
+    - 0.0
+    ik_seed_positions:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 2.0
+    - 0.0
+    - 0.0
+    - 0.0
+    joint_pose:
+      neutral_positions:
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.1
+      - 0.0
+      - 0.0
+      - 0.0
+      joint1_base: 0.0
+      joint1_forward_gain: -0.45
+      joint1_backward_gain: 0.17
+      upper_backward_start: 0.03
+      upper_backward_full: 0.55
+      joint1_up_gain: -1.72
+      joint1_min: -2.0
+      joint1_max: 1.39
+      joint2_base: 0.0
+      joint2_outward_gain: -0.2
+      joint2_inward_gain: 0.0
+      joint2_upper_outward_gain: -0.55
+      upper_outward_start: 0.15
+      upper_outward_full: 0.75
+      joint2_min: -1.2
+      joint2_max: 0.8
+      joint3_elbow_plane_gain: -1.64
+      joint4_base: 0.1
+      joint4_forward_gain: 0.1
+      joint4_up_gain: 0.2
+      joint4_elbow_bend_gain: 1.42
+      elbow_straight_deg: 165.0
+      elbow_bent_deg: 70.0
+      joint4_min: 0.0
+      joint4_max: 2.443
+      joint5_hand_rotation_gain: 0.0
+      joint6_base: 0.0
+      joint6_forearm_inward_gain: -1.0
+      forearm_inward_start: 0.1
+      forearm_inward_full: 0.7
+      joint6_min: -1.2
+      joint6_max: 0.3
+    workspace_min:
+    - -0.22
+    - 0.1
+    - 0.2
+    workspace_max:
+    - 0.14
+    - 0.34
+    - 0.5
+  right:
+    moveit_group: right_arm
+    ik_link: openarm_right_hand
+    controller_action: /right_joint_trajectory_controller/follow_joint_trajectory
+    joint_names:
+    - openarm_right_joint1
+    - openarm_right_joint2
+    - openarm_right_joint3
+    - openarm_right_joint4
+    - openarm_right_joint5
+    - openarm_right_joint6
+    - openarm_right_joint7
+    neutral_position:
+    - -0.08
+    - -0.22
+    - 0.32
+    neutral_quaternion_xyzw:
+    - 1.0
+    - 0.0
+    - 0.0
+    - 0.0
+    ik_seed_positions:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 2.0
+    - 0.0
+    - 0.0
+    - 0.0
+    joint_pose:
+      neutral_positions:
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.1
+      - 0.0
+      - 0.0
+      - 0.0
+      joint1_base: 0.0
+      joint1_forward_gain: 0.45
+      joint1_backward_gain: -0.17
+      upper_backward_start: 0.03
+      upper_backward_full: 0.55
+      joint1_up_gain: 1.72
+      joint1_min: -1.39
+      joint1_max: 2.0
+      joint2_base: 0.0
+      joint2_outward_gain: 0.2
+      joint2_inward_gain: 0.0
+      joint2_upper_outward_gain: 0.55
+      upper_outward_start: 0.15
+      upper_outward_full: 0.75
+      joint2_min: -0.8
+      joint2_max: 1.2
+      joint3_elbow_plane_gain: 1.64
+      joint4_base: 0.1
+      joint4_forward_gain: 0.1
+      joint4_up_gain: 0.2
+      joint4_elbow_bend_gain: 1.42
+      elbow_straight_deg: 165.0
+      elbow_bent_deg: 70.0
+      joint4_min: 0.0
+      joint4_max: 2.443
+      joint5_hand_rotation_gain: 0.0
+      joint6_base: 0.0
+      joint6_forearm_inward_gain: 1.0
+      forearm_inward_start: 0.1
+      forearm_inward_full: 0.7
+      joint6_min: -0.3
+      joint6_max: 1.2
+    workspace_min:
+    - -0.22
+    - -0.34
+    - 0.2
+    workspace_max:
+    - 0.14
+    - -0.1
+    - 0.5
