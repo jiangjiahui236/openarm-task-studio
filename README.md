@@ -81,14 +81,6 @@ OPENARM_TASK_STUDIO_SELF_TEST=1 ./run_task_studio.sh --headless --duration 30
 - `esp32c3_remote_button/`：可选无线记录按钮固件
 - `ARCHITECTURE.md`：任务编译与执行架构
 
-## 隐私
-
-仓库不应包含摄像头画面、动作日志、任务历史、Wi-Fi 密码、用户名或本机绝对路径。`.gitignore` 已排除运行时数据；发布前请执行：
-
-```bash
-./scripts/privacy_check.sh
-```
-
 ## 贡献与许可
 
 欢迎提交 Issue 和 Pull Request。使用前请阅读 `CONTRIBUTING.md`。本项目采用 [Apache License 2.0](LICENSE)。
