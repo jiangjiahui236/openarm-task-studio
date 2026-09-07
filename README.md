@@ -24,7 +24,7 @@
 
 ## 环境要求
 
-- Ubuntu 22.04（当前仅验证 Linux）
+- Ubuntu 22.04
 - NVIDIA GPU、驱动以及能够正常启动 Isaac Sim 的图形环境
 - Isaac Sim 5.1.0
 - [Isaac Lab](https://github.com/isaac-sim/IsaacLab) 2.3.0
