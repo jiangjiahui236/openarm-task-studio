@@ -21,6 +21,8 @@ tasks/**
 *.jpg
 *.jpeg
 *.png
+!动捕演示.png
+!任务规划演示.png
 *.mp4
 *.avi
 *.bag
