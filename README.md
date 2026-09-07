@@ -14,6 +14,8 @@
 
 ## 演示
 
+[OpenArm + Isaac Sim：低成本动捕示教与双臂任务编排](https://www.bilibili.com/video/BV1gfMC6wEsw/?share_source=copy_web&vd_source=8e820365e6a86646d0c0570980ebb1cb)
+
 ### 动作捕捉
 
 ![动捕演示](./motion_capture_demo.png)
