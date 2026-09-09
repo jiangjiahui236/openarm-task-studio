@@ -273,7 +273,6 @@ cd "$OPENARM_ISAAC_REPO"
 | `config/` | Kit 扩展清单和动作映射配置 |
 | `esp32c3_remote_button/` | 可选 ESP32-C3 固件与接线说明 |
 
-这些 Python 文件按职责拆分，都是运行功能或测试所需文件；`__pycache__`、`.pytest_cache`、日志和个人任务数据由 `.gitignore` 排除，不会进入 GitHub。
 
 ## 贡献与许可
 
